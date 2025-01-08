@@ -20,7 +20,7 @@
             padding: 10px;
             text-align: center;
         }
-        input[type="number"] {
+        input[type="number"], input[type="text"] {
             width: 60px;
             padding: 5px;
             border: 1px solid #ccc;
@@ -52,11 +52,11 @@
 <body>
     <table>
         <tr>
-            <td><input type="number" id="time1" placeholder="Time 1"></td>
-            <td><input type="number" id="time2" placeholder="Time 2"></td>
-            <td><input type="number" id="time3" placeholder="Time 3"></td>
-            <td><input type="number" id="time4" placeholder="Time 4"></td>
-            <td><input type="number" id="time5" placeholder="Time 5"></td>
+            <td><input type="text" id="time1" placeholder="Time 1"></td>
+            <td><input type="text" id="time2" placeholder="Time 2"></td>
+            <td><input type="text" id="time3" placeholder="Time 3"></td>
+            <td><input type="text" id="time4" placeholder="Time 4"></td>
+            <td><input type="text" id="time5" placeholder="Time 5"></td>
         </tr>
     </table>
     <button onclick="calculate()">Ao5</button>
@@ -66,32 +66,39 @@
             let values = [];
             
             // Retrieve values from input fields
-            values.push(parseFloat(document.getElementById('time1').value));
-            values.push(parseFloat(document.getElementById('time2').value));
-            values.push(parseFloat(document.getElementById('time3').value));
-            values.push(parseFloat(document.getElementById('time4').value));
-            values.push(parseFloat(document.getElementById('time5').value));
+            values.push(document.getElementById('time1').value);
+            values.push(document.getElementById('time2').value);
+            values.push(document.getElementById('time3').value);
+            values.push(document.getElementById('time4').value);
+            values.push(document.getElementById('time5').value);
             
-            // Calculate min and max values
-            let minVal = Math.min(...values);
-            let maxVal = Math.max(...values);
+            // Convert DNF/DNS to a very high number
+            const highValue = Number.MAX_VALUE;
+            let processedValues = values.map(val => val === 'DNF' || val === 'DNS' ? highValue : parseFloat(val));
+            
+            let minVal = Math.min(...processedValues);
+            let maxVal = Math.max(...processedValues);
+            
+            // Count DNF/DNS values
+            let dnfs = values.filter(val => val === 'DNF' || val === 'DNS').length;
+            
+            if (dnfs > 2) {
+                document.getElementById('result').innerText = 'DNF';
+                return;
+            }
 
-            // Format result with parentheses around min and max values, and two decimal places
-            let result = values.map(val => {
-                if (val === minVal || val === maxVal) {
-                    return `(${val.toFixed(2)})`;
-                } else {
-                    return val.toFixed(2);
+            let result = processedValues.map((val, idx) => {
+                let originalVal = values[idx];
+                if (originalVal !== 'DNF' && originalVal !== 'DNS') {
+                    originalVal = val.toFixed(2);
                 }
+                return val === minVal || val === maxVal ? `(${originalVal})` : originalVal;
             });
-
-            // Calculate the average of values excluding min and max
-            let sum = values.reduce((acc, val) => acc + val, 0);
-            let avg = ((sum - minVal - maxVal) / (values.length - 2)).toFixed(2);
-
-            // Join result and display
+            
+            let sum = processedValues.reduce((acc, val) => acc + val, 0);
+            let avg = ((sum - minVal - maxVal) / (processedValues.length - 2)).toFixed(2);
+            
             result = result.join(', ') + ' = ' + avg;
-
             document.getElementById('result').innerText = result;
         }
     </script>
