@@ -65,12 +65,12 @@
         function calculate() {
             let values = [];
             
-            // Retrieve values from input fields
-            values.push(document.getElementById('time1').value);
-            values.push(document.getElementById('time2').value);
-            values.push(document.getElementById('time3').value);
-            values.push(document.getElementById('time4').value);
-            values.push(document.getElementById('time5').value);
+            // Retrieve and process values from input fields, make input case-insensitive
+            values.push(document.getElementById('time1').value.toUpperCase());
+            values.push(document.getElementById('time2').value.toUpperCase());
+            values.push(document.getElementById('time3').value.toUpperCase());
+            values.push(document.getElementById('time4').value.toUpperCase());
+            values.push(document.getElementById('time5').value.toUpperCase());
             
             // Convert DNF/DNS to a very high number
             const highValue = Number.MAX_VALUE;
@@ -90,10 +90,18 @@
             let result = processedValues.map((val, idx) => {
                 let originalVal = values[idx];
                 if (originalVal !== 'DNF' && originalVal !== 'DNS') {
+                    if(isNaN(originalVal)){
+                        document.getElementById('result').innerText = 'Invalid input detected!';
+                        return;
+                    }
                     originalVal = val.toFixed(2);
                 }
                 return val === minVal || val === maxVal ? `(${originalVal})` : originalVal;
-            });
+            }).filter(val => val);
+
+            if(document.getElementById('result').innerText === 'Invalid input detected!'){
+                return;
+            }
             
             let sum = processedValues.reduce((acc, val) => acc + val, 0);
             let avg = ((sum - minVal - maxVal) / (processedValues.length - 2)).toFixed(2);
