@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Array Calculator</title>
+    <title>Time Calculator</title>
     <style>
         table, th, td {
             border: 1px solid black;
@@ -19,15 +19,55 @@
 <body>
     <table>
         <tr>
-            <td><input type="number" id="valueB2"></td>
-            <td><input type="number" id="valueC2"></td>
-            <td><input type="number" id="valueD2"></td>
-            <td><input type="number" id="valueE2"></td>
-            <td><input type="number" id="valueF2"></td>
+            <th>Time 1</th>
+            <th>Time 2</th>
+            <th>Time 3</th>
+            <th>Time 4</th>
+            <th>Time 5</th>
+        </tr>
+        <tr>
+            <td><input type="number" id="time1" placeholder="Time 1"></td>
+            <td><input type="number" id="time2" placeholder="Time 2"></td>
+            <td><input type="number" id="time3" placeholder="Time 3"></td>
+            <td><input type="number" id="time4" placeholder="Time 4"></td>
+            <td><input type="number" id="time5" placeholder="Time 5"></td>
         </tr>
     </table>
     <button onclick="calculate()">Calculate</button>
     <div id="result"></div>
-    <script src="script.js"></script>
+    <script>
+        function calculate() {
+            let values = [];
+            
+            // Retrieve values from input fields
+            values.push(parseFloat(document.getElementById('time1').value));
+            values.push(parseFloat(document.getElementById('time2').value));
+            values.push(parseFloat(document.getElementById('time3').value));
+            values.push(parseFloat(document.getElementById('time4').value));
+            values.push(parseFloat(document.getElementById('time5').value));
+            
+            // Calculate min and max values
+            let minVal = Math.min(...values);
+            let maxVal = Math.max(...values);
+
+            // Format result with parentheses around min and max values, and two decimal places
+            let result = values.map(val => {
+                if (val === minVal || val === maxVal) {
+                    return `(${val.toFixed(2)})`;
+                } else {
+                    return val.toFixed(2);
+                }
+            });
+
+            // Calculate the average of values excluding min and max
+            let sum = values.reduce((acc, val) => acc + val, 0);
+            let avg = ((sum - minVal - maxVal) / (values.length - 2)).toFixed(2);
+
+            // Join result and display
+            result = result.join(', ') + ' = ' + avg;
+
+            document.getElementById('result').innerText = result;
+        }
+    </script>
 </body>
 </html>
