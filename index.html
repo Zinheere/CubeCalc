@@ -109,22 +109,24 @@
             let minVal = Math.min(...validValues);
             let maxVal = Math.max(...validValues);
             let dnfs = processedValues.filter(val => val === null).length;
-            let displayValues = processedValues.slice();  // Clone the array for display purposes
+            let displayValues = values.slice();  // Clone the array for display purposes
 
             if (dnfs > 1) {
                 document.getElementById('result').innerText = 'DNF';
                 return;
             } else if (dnfs === 1) {
-                // If there is one DNF, highlight min value only
+                // If there is one DNF, calculate the average of the remaining four, treating the highest as DNF
                 let validSum = validValues.reduce((acc, val) => acc + val, 0);
                 let avg = ((validSum - minVal) / 3).toFixed(2);  // Calculate average using the lowest 3 valid values
 
-                for (let i = 0; i < processedValues.length; i++) {
-                    if (processedValues[i] === minVal) {
-                        displayValues[i] = `(${minVal.toFixed(2)})`;
-                        minVal = null;
-                    } else if (processedValues[i] === null) {
+                for (let i = 0; i < values.length; i++) {
+                    if (processedValues[i] === null) {
                         displayValues[i] = `(DNF)`;
+                    } else if (processedValues[i] === minVal) {
+                        displayValues[i] = `(${minVal.toFixed(2)})`;
+                        minVal = null;  // Ensure only the first occurrence is highlighted
+                    } else if (processedValues[i] === maxVal) {
+                        displayValues[i] = processedValues[i].toFixed(2);
                     } else {
                         displayValues[i] = processedValues[i].toFixed(2);
                     }
@@ -137,13 +139,15 @@
             let sum = validValues.reduce((acc, val) => acc + val, 0);
             let avg = ((sum - minVal - maxVal) / 3).toFixed(2);
 
-            for (let i = 0; i < processedValues.length; i++) {
-                if (processedValues[i] === minVal) {
+            for (let i = 0; i < values.length; i++) {
+                if (processedValues[i] === null) {
+                    displayValues[i] = `(DNF)`;
+                } else if (processedValues[i] === minVal) {
                     displayValues[i] = `(${minVal.toFixed(2)})`;
-                    minVal = null;
+                    minVal = null;  // Ensure only the first occurrence is highlighted
                 } else if (processedValues[i] === maxVal) {
                     displayValues[i] = `(${maxVal.toFixed(2)})`;
-                    maxVal = null;
+                    maxVal = null;  // Ensure only the first occurrence is highlighted
                 } else {
                     displayValues[i] = processedValues[i].toFixed(2);
                 }
