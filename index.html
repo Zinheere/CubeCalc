@@ -87,26 +87,33 @@
             if (dnfs > 1) {
                 document.getElementById('result').innerText = 'DNF';
                 return;
-            } else if (dnfs === 1) {
-                let totalValid = validValues.reduce((acc, val) => acc + val, 0);
-                let sum = totalValid + maxVal; // Add maxVal back for averaging
-                let avg = (sum / 3).toFixed(2); // Keep one DNF as highest, use 3 valid values
-                document.getElementById('result').innerText = values.join(', ').replace('DNF', `(DNF)`) + ' = ' + avg;
+            } else if (dnfs === 1 && validValues.length === 4) {
+                let sum = validValues.reduce((acc, val) => acc + val, 0);
+                let avg = (sum / 3).toFixed(2);  // Use 3 non-null values
+                
+                let result = values.map((val, idx) => {
+                    if (processedValues[idx] !== null) {
+                        return processedValues[idx] === minVal ? `(${processedValues[idx].toFixed(2)})` : processedValues[idx].toFixed(2);
+                    } else {
+                        return `(DNF)`;
+                    }
+                }).join(', ') + ' = ' + avg;
+                
+                document.getElementById('result').innerText = result;
                 return;
             }
         
             let sum = validValues.reduce((acc, val) => acc + val, 0);
-            let avg = ((sum - minVal - maxVal) / (validValues.length - 2)).toFixed(2);
-        
+            let avg = ((sum - minVal - maxVal) / 3).toFixed(2);
+
             let result = values.map((val, idx) => {
                 if (processedValues[idx] !== null) {
-                    return processedValues[idx] === minVal || processedValues[idx] === maxVal ? `(${val.toFixed(2)})` : val.toFixed(2);
+                    return processedValues[idx] === minVal || processedValues[idx] === maxVal ? `(${processedValues[idx].toFixed(2)})` : processedValues[idx].toFixed(2);
                 } else {
                     return `(DNF)`;
                 }
-            });
-        
-            result = result.join(', ') + ' = ' + avg;
+            }).join(', ') + ' = ' + avg;
+
             document.getElementById('result').innerText = result;
         }
     </script>
