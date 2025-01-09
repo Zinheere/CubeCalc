@@ -34,20 +34,33 @@
             box-sizing: border-box;
             text-align: center;
         }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px auto;
+            gap: 10px;
+        }
         button {
             width: 100%;
             max-width: 200px;
-            margin: 20px auto;
             padding: 15px;
-            background-color: #007BFF;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 1.2em;
         }
-        button:hover {
+        .ao5-button {
+            background-color: #007BFF;
+        }
+        .ao5-button:hover {
             background-color: #0056b3;
+        }
+        .mo5-button {
+            background-color: #e91e63;
+        }
+        .mo5-button:hover {
+            background-color: #ad1457;
         }
         #result, #mo5-result {
             margin: 20px auto;
@@ -69,8 +82,10 @@
             <td><input type="text" id="time5" placeholder="Time 5"></td>
         </tr>
     </table>
-    <button onclick="calculateAo5()">Calculate Ao5</button>
-    <button onclick="calculateMo5()">Calculate Mo5</button>
+    <div class="button-container">
+        <button class="ao5-button" onclick="calculateAo5()">Calculate Ao5</button>
+        <button class="mo5-button" onclick="calculateMo5()">Calculate Mo5</button>
+    </div>
     <div id="result"></div>
     <div id="mo5-result"></div>
     <script>
@@ -100,17 +115,14 @@
                 document.getElementById('result').innerText = 'DNF';
                 return;
             } else if (dnfs === 1) {
-                // If there is one DNF, treat min value separately
+                // If there is one DNF, highlight min value only
                 let validSum = validValues.reduce((acc, val) => acc + val, 0);
                 let avg = ((validSum - minVal) / 3).toFixed(2);  // Calculate average using the lowest 3 valid values
 
-                // Highlight min value but not max value
                 for (let i = 0; i < processedValues.length; i++) {
                     if (processedValues[i] === minVal) {
                         displayValues[i] = `(${minVal.toFixed(2)})`;
-                        minVal = null;  // To ensure only the first occurrence is highlighted
-                    } else if (processedValues[i] === maxVal) {
-                        displayValues[i] = `${processedValues[i].toFixed(2)}`;
+                        minVal = null;
                     } else if (processedValues[i] === null) {
                         displayValues[i] = `(DNF)`;
                     } else {
@@ -122,20 +134,16 @@
                 return;
             }
 
-            // If no DNFs or a valid scenario, calculate and display correctly
             let sum = validValues.reduce((acc, val) => acc + val, 0);
             let avg = ((sum - minVal - maxVal) / 3).toFixed(2);
 
-            // Bracket correctly
             for (let i = 0; i < processedValues.length; i++) {
                 if (processedValues[i] === minVal) {
                     displayValues[i] = `(${minVal.toFixed(2)})`;
-                    minVal = null;  // To ensure only the first occurrence is highlighted
+                    minVal = null;
                 } else if (processedValues[i] === maxVal) {
                     displayValues[i] = `(${maxVal.toFixed(2)})`;
-                    maxVal = null;  // To ensure only the first occurrence is highlighted
-                } else if (processedValues[i] === null) {
-                    displayValues[i] = `(DNF)`;
+                    maxVal = null;
                 } else {
                     displayValues[i] = processedValues[i].toFixed(2);
                 }
