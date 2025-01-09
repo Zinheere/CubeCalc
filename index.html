@@ -6,88 +6,133 @@
     <title>Time Calculator</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #fafafa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #1a1b1e;
+            color: #e4e4e7;
             margin: 0;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            padding: 20px;
         }
+
+        .container {
+            background-color: #27272a;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 700px;
+        }
+
         table {
             width: 100%;
-            max-width: 600px;
-            border-collapse: collapse;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-collapse: separate;
+            border-spacing: 8px;
+            margin-bottom: 1.5rem;
         }
+
         th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
+            border: none;
+            padding: 0;
         }
+
         input[type="text"] {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            background-color: #3f3f46;
+            border: 2px solid #52525b;
+            border-radius: 8px;
+            color: #e4e4e7;
+            font-size: 1.1em;
+            transition: all 0.2s ease;
             text-align: center;
         }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        input[type="text"]::placeholder {
+            color: #71717a;
+        }
+
         .button-container {
             display: flex;
             justify-content: center;
-            margin: 20px auto;
-            gap: 10px;
+            gap: 12px;
+            margin: 1.5rem 0;
         }
+
         button {
-            width: 100%;
-            max-width: 200px;
-            padding: 15px;
+            padding: 12px 24px;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1.2em;
+            font-size: 1.1em;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            min-width: 160px;
         }
+
         .ao5-button {
-            background-color: #007BFF;
+            background-color: #4f46e5;
         }
+
         .ao5-button:hover {
-            background-color: #0056b3;
+            background-color: #4338ca;
+            transform: translateY(-1px);
         }
+
         .mo5-button {
-            background-color: #e91e63;
+            background-color: #db2777;
         }
+
         .mo5-button:hover {
-            background-color: #ad1457;
+            background-color: #be185d;
+            transform: translateY(-1px);
         }
+
         #result, #mo5-result {
-            margin: 20px auto;
-            width: 100%;
-            max-width: 600px;
+            margin: 1rem 0;
+            padding: 1rem;
             text-align: center;
-            font-weight: bold;
-            font-size: 1.5em;
+            font-weight: 500;
+            font-size: 1.3em;
+            background-color: #3f3f46;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #result:not(:empty), #mo5-result:not(:empty) {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-    <table>
-        <tr>
-            <td><input type="text" id="time1" placeholder="Time 1"></td>
-            <td><input type="text" id="time2" placeholder="Time 2"></td>
-            <td><input type="text" id="time3" placeholder="Time 3"></td>
-            <td><input type="text" id="time4" placeholder="Time 4"></td>
-            <td><input type="text" id="time5" placeholder="Time 5"></td>
-        </tr>
-    </table>
-    <div class="button-container">
-        <button class="ao5-button" onclick="calculateAo5()">Calculate Ao5</button>
-        <button class="mo5-button" onclick="calculateMo5()">Calculate Mo5</button>
+    <div class="container">
+        <table>
+            <tr>
+                <td><input type="text" id="time1" placeholder="Time 1"></td>
+                <td><input type="text" id="time2" placeholder="Time 2"></td>
+                <td><input type="text" id="time3" placeholder="Time 3"></td>
+                <td><input type="text" id="time4" placeholder="Time 4"></td>
+                <td><input type="text" id="time5" placeholder="Time 5"></td>
+            </tr>
+        </table>
+        <div class="button-container">
+            <button class="ao5-button" onclick="calculateAo5()">Calculate Ao5</button>
+            <button class="mo5-button" onclick="calculateMo5()">Calculate Mo5</button>
+        </div>
+        <div id="result"></div>
+        <div id="mo5-result"></div>
     </div>
-    <div id="result"></div>
-    <div id="mo5-result"></div>
     <script>
         function calculateAo5() {
             let values = [
@@ -109,14 +154,14 @@
             let minVal = Math.min(...validValues);
             let maxVal = Math.max(...validValues);
             let dnfs = processedValues.filter(val => val === null).length;
-            let displayValues = values.slice();  // Clone the array for display purposes
+            let displayValues = values.slice();
 
             if (dnfs > 1) {
                 document.getElementById('result').innerText = 'DNF';
                 return;
             } else if (dnfs === 1) {
                 let validSum = validValues.reduce((acc, val) => acc + val, 0);
-                let avg = ((validSum - minVal) / 3).toFixed(2);  // Calculate average using the lowest 3 valid values
+                let avg = ((validSum - minVal) / 3).toFixed(2);
 
                 for (let i = 0; i < values.length; i++) {
                     if (processedValues[i] === null) {
@@ -173,7 +218,7 @@
 
             let validValues = processedValues.filter(val => val !== null);
             let sum = validValues.reduce((acc, val) => acc + val, 0);
-            let avg = (sum / validValues.length).toFixed(2);  // Simply calculate the mean of 5
+            let avg = (sum / validValues.length).toFixed(2);
 
             let result = values.map((val, idx) => {
                 if (processedValues[idx] === null) {
