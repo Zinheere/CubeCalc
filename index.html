@@ -49,7 +49,7 @@
         button:hover {
             background-color: #0056b3;
         }
-        #result {
+        #result, #mo5-result {
             margin: 20px auto;
             width: 100%;
             max-width: 600px;
@@ -69,10 +69,12 @@
             <td><input type="text" id="time5" placeholder="Time 5"></td>
         </tr>
     </table>
-    <button onclick="calculate()">Calculate Ao5</button>
+    <button onclick="calculateAo5()">Calculate Ao5</button>
+    <button onclick="calculateMo5()">Calculate Mo5</button>
     <div id="result"></div>
+    <div id="mo5-result"></div>
     <script>
-        function calculate() {
+        function calculateAo5() {
             let values = [
                 document.getElementById('time1').value.toUpperCase(),
                 document.getElementById('time2').value.toUpperCase(),
@@ -140,6 +142,37 @@
             }
 
             document.getElementById('result').innerText = displayValues.join(', ') + ' = ' + avg;
+        }
+
+        function calculateMo5() {
+            let values = [
+                document.getElementById('time1').value.toUpperCase(),
+                document.getElementById('time2').value.toUpperCase(),
+                document.getElementById('time3').value.toUpperCase(),
+                document.getElementById('time4').value.toUpperCase(),
+                document.getElementById('time5').value.toUpperCase()
+            ];
+
+            let processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
+            let validValues = processedValues.filter(val => val !== null);
+
+            if (validValues.length < 3) {
+                document.getElementById('mo5-result').innerText = 'DNF';
+                return;
+            }
+
+            let sum = validValues.reduce((acc, val) => acc + val, 0);
+            let avg = (sum / validValues.length).toFixed(2);  // Simply calculate the mean of 5
+
+            let result = values.map((val, idx) => {
+                if (processedValues[idx] === null) {
+                    return `(DNF)`;
+                } else {
+                    return processedValues[idx].toFixed(2);
+                }
+            }).join(', ') + ' = ' + avg;
+
+            document.getElementById('mo5-result').innerText = result;
         }
     </script>
 </body>
