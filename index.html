@@ -115,7 +115,6 @@
                 document.getElementById('result').innerText = 'DNF';
                 return;
             } else if (dnfs === 1) {
-                // If there is one DNF, treat min value separately
                 let validSum = validValues.reduce((acc, val) => acc + val, 0);
                 let avg = ((validSum - minVal) / 3).toFixed(2);  // Calculate average using the lowest 3 valid values
 
@@ -136,7 +135,6 @@
                 return;
             }
 
-            // Calculate regular Ao5
             let sum = validValues.reduce((acc, val) => acc + val, 0);
             let avg = ((sum - minVal - maxVal) / 3).toFixed(2);
 
@@ -167,13 +165,13 @@
             ];
 
             let processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
-            let validValues = processedValues.filter(val => val !== null);
-
+            
             if (processedValues.includes(null)) {
                 document.getElementById('mo5-result').innerText = 'DNF';
                 return;
             }
 
+            let validValues = processedValues.filter(val => val !== null);
             let sum = validValues.reduce((acc, val) => acc + val, 0);
             let avg = (sum / validValues.length).toFixed(2);  // Simply calculate the mean of 5
 
