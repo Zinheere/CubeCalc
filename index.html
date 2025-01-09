@@ -115,7 +115,7 @@
                 document.getElementById('result').innerText = 'DNF';
                 return;
             } else if (dnfs === 1) {
-                // If there is one DNF, calculate the average of the remaining four, treating the highest as DNF
+                // If there is one DNF, treat min value separately
                 let validSum = validValues.reduce((acc, val) => acc + val, 0);
                 let avg = ((validSum - minVal) / 3).toFixed(2);  // Calculate average using the lowest 3 valid values
 
@@ -124,7 +124,7 @@
                         displayValues[i] = `(DNF)`;
                     } else if (processedValues[i] === minVal) {
                         displayValues[i] = `(${minVal.toFixed(2)})`;
-                        minVal = null;  // Ensure only the first occurrence is highlighted
+                        minVal = null;
                     } else if (processedValues[i] === maxVal) {
                         displayValues[i] = processedValues[i].toFixed(2);
                     } else {
@@ -136,6 +136,7 @@
                 return;
             }
 
+            // Calculate regular Ao5
             let sum = validValues.reduce((acc, val) => acc + val, 0);
             let avg = ((sum - minVal - maxVal) / 3).toFixed(2);
 
@@ -144,10 +145,10 @@
                     displayValues[i] = `(DNF)`;
                 } else if (processedValues[i] === minVal) {
                     displayValues[i] = `(${minVal.toFixed(2)})`;
-                    minVal = null;  // Ensure only the first occurrence is highlighted
+                    minVal = null;
                 } else if (processedValues[i] === maxVal) {
                     displayValues[i] = `(${maxVal.toFixed(2)})`;
-                    maxVal = null;  // Ensure only the first occurrence is highlighted
+                    maxVal = null;
                 } else {
                     displayValues[i] = processedValues[i].toFixed(2);
                 }
@@ -168,7 +169,7 @@
             let processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
             let validValues = processedValues.filter(val => val !== null);
 
-            if (validValues.length < 3) {
+            if (processedValues.includes(null)) {
                 document.getElementById('mo5-result').innerText = 'DNF';
                 return;
             }
