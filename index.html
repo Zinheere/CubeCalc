@@ -1,54 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Time Calculator</title>
     <style>
+        :root[data-theme="dark"] {
+            --bg-color: #1a1b1e;
+            --container-bg: #27272a;
+            --input-bg: #3f3f46;
+            --input-border: #52525b;
+            --text-color: #e4e4e7;
+            --placeholder-color: #71717a;
+            --result-bg: #3f3f46;
+        }
+
+        :root[data-theme="light"] {
+            --bg-color: #f4f4f5;
+            --container-bg: #ffffff;
+            --input-bg: #ffffff;
+            --input-border: #d4d4d8;
+            --text-color: #18181b;
+            --placeholder-color: #71717a;
+            --result-bg: #f4f4f5;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #1a1b1e;
-            color: #e4e4e7;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
             padding: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: 2px solid var(--input-border);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--input-border);
         }
 
         .container {
-            background-color: #27272a;
+            background-color: var(--container-bg);
             padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 700px;
+            transition: background-color 0.3s ease;
         }
 
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 8px;
+        .input-grid {
+            display: grid;
+            grid-gap: 15px;
             margin-bottom: 1.5rem;
         }
 
-        th, td {
-            border: none;
-            padding: 0;
+        @media (min-width: 768px) {
+            .input-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper label {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            font-size: 0.9em;
+            color: var(--text-color);
         }
 
         input[type="text"] {
             width: 100%;
             padding: 12px;
-            background-color: #3f3f46;
-            border: 2px solid #52525b;
+            background-color: var(--input-bg);
+            border: 2px solid var(--input-border);
             border-radius: 8px;
-            color: #e4e4e7;
+            color: var(--text-color);
             font-size: 1.1em;
             transition: all 0.2s ease;
             text-align: center;
+            box-sizing: border-box;
         }
 
         input[type="text"]:focus {
@@ -58,7 +111,7 @@
         }
 
         input[type="text"]::placeholder {
-            color: #71717a;
+            color: var(--placeholder-color);
         }
 
         .button-container {
@@ -66,9 +119,10 @@
             justify-content: center;
             gap: 12px;
             margin: 1.5rem 0;
+            flex-wrap: wrap;
         }
 
-        button {
+        button:not(.theme-toggle) {
             padding: 12px 24px;
             color: #fff;
             border: none;
@@ -77,7 +131,7 @@
             font-size: 1.1em;
             font-weight: 500;
             transition: all 0.2s ease;
-            min-width: 160px;
+            min-width: 140px;
         }
 
         .ao5-button {
@@ -103,29 +157,59 @@
             padding: 1rem;
             text-align: center;
             font-weight: 500;
-            font-size: 1.3em;
-            background-color: #3f3f46;
+            font-size: 1.1em;
+            background-color: var(--result-bg);
             border-radius: 8px;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: all 0.3s ease;
+            word-break: break-word;
         }
 
         #result:not(:empty), #mo5-result:not(:empty) {
             opacity: 1;
         }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            button:not(.theme-toggle) {
+                width: 100%;
+            }
+            
+            #result, #mo5-result {
+                font-size: 0.9em;
+                padding: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
     <div class="container">
-        <table>
-            <tr>
-                <td><input type="text" id="time1" placeholder="Time 1"></td>
-                <td><input type="text" id="time2" placeholder="Time 2"></td>
-                <td><input type="text" id="time3" placeholder="Time 3"></td>
-                <td><input type="text" id="time4" placeholder="Time 4"></td>
-                <td><input type="text" id="time5" placeholder="Time 5"></td>
-            </tr>
-        </table>
+        <div class="input-grid">
+            <div class="input-wrapper">
+                <label for="time1">Time 1</label>
+                <input type="text" id="time1" placeholder="Enter time">
+            </div>
+            <div class="input-wrapper">
+                <label for="time2">Time 2</label>
+                <input type="text" id="time2" placeholder="Enter time">
+            </div>
+            <div class="input-wrapper">
+                <label for="time3">Time 3</label>
+                <input type="text" id="time3" placeholder="Enter time">
+            </div>
+            <div class="input-wrapper">
+                <label for="time4">Time 4</label>
+                <input type="text" id="time4" placeholder="Enter time">
+            </div>
+            <div class="input-wrapper">
+                <label for="time5">Time 5</label>
+                <input type="text" id="time5" placeholder="Enter time">
+            </div>
+        </div>
         <div class="button-container">
             <button class="ao5-button" onclick="calculateAo5()">Calculate Ao5</button>
             <button class="mo5-button" onclick="calculateMo5()">Calculate Mo5</button>
@@ -134,6 +218,13 @@
         <div id="mo5-result"></div>
     </div>
     <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+        }
+
         function calculateAo5() {
             let values = [
                 document.getElementById('time1').value.toUpperCase(),
