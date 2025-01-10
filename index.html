@@ -152,6 +152,15 @@
             transform: translateY(-1px);
         }
 
+        .clear-button {
+            background-color: #ef4444;
+        }
+
+        .clear-button:hover {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+        }
+
         #result, #mo5-result {
             margin: 1rem 0;
             padding: 1rem;
@@ -208,6 +217,7 @@
         <div class="button-container">
             <button class="ao5-button" onclick="calculateAo5()">Calculate Ao5</button>
             <button class="mo5-button" onclick="calculateMo5()">Calculate Mo5</button>
+            <button class="clear-button" onclick="clearTimes()">Clear All</button>
         </div>
         <div id="result"></div>
         <div id="mo5-result"></div>
@@ -218,6 +228,14 @@
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', newTheme);
+        }
+
+        function clearTimes() {
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`time${i}`).value = '';
+            }
+            document.getElementById('result').innerText = '';
+            document.getElementById('mo5-result').innerText = '';
         }
 
         function calculateAo5() {
