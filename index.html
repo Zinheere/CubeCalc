@@ -223,6 +223,7 @@
         <div id="mo5-result"></div>
     </div>
     <script>
+        const standardTimeRegex = /^(?:\d+:)?[0-5]?\d\.\d{2}$/;
         function toggleTheme() {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
@@ -231,14 +232,17 @@
         }
 
         function clearTimes() {
+            // Clear all input fields
             for (let i = 1; i <= 5; i++) {
                 document.getElementById(`time${i}`).value = '';
             }
+            // Clear results
             document.getElementById('result').innerText = '';
             document.getElementById('mo5-result').innerText = '';
         }
 
         function calculateAo5() {
+            let valid = true;
             let values = [
                 document.getElementById('time1').value.toUpperCase(),
                 document.getElementById('time2').value.toUpperCase(),
@@ -246,6 +250,18 @@
                 document.getElementById('time4').value.toUpperCase(),
                 document.getElementById('time5').value.toUpperCase()
             ];
+            values.forEach(value => {
+                if (!standardTimeRegex.test(value) && valid === true) {
+                alert(
+                    `Invalid time format. Please use either:\n` +
+                    `- mm:ss.ms (e.g., "1:23.45" or "23.45")\n` +
+                    `- For times under a minute, you can omit the minutes (e.g., "45.67")`
+                );
+                valid = false;
+                return;
+                }
+            });
+            if (valid === true) {
 
             let processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
             let validValues = processedValues.filter(val => val !== null);
@@ -302,6 +318,7 @@
             }
 
             document.getElementById('result').innerText = displayValues.join(', ') + ' = ' + avg;
+            }
         }
 
         function calculateMo5() {
