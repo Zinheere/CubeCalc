@@ -253,7 +253,7 @@
             values.forEach(value => {
                 if (!standardTimeRegex.test(value) && valid === true) {
                 alert(
-                    `Invalid time format. Please use either:\n` +
+                    `Invalid time format or blank field. Please use either:\n` +
                     `- mm:ss.ms (e.g., "1:23.45" or "23.45")\n` +
                     `- For times under a minute, you can omit the minutes (e.g., "45.67")`
                 );
@@ -322,6 +322,7 @@
         }
 
         function calculateMo5() {
+            let valid = true;
             let values = [
                 document.getElementById('time1').value.toUpperCase(),
                 document.getElementById('time2').value.toUpperCase(),
@@ -329,6 +330,18 @@
                 document.getElementById('time4').value.toUpperCase(),
                 document.getElementById('time5').value.toUpperCase()
             ];
+            values.forEach(value => {
+                if (!standardTimeRegex.test(value) && valid === true) {
+                alert(
+                    `Invalid time format or blank field. Please use either:\n` +
+                    `- mm:ss.ms (e.g., "1:23.45" or "23.45")\n` +
+                    `- For times under a minute, you can omit the minutes (e.g., "45.67")`
+                );
+                valid = false;
+                return;
+                }
+            });
+            if (valid === true) {
 
             let processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
             
@@ -351,6 +364,7 @@
 
             document.getElementById('mo5-result').innerText = result;
         }
+    }
     </script>
 </body>
 </html>
