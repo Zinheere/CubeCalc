@@ -1,359 +1,277 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Time Calculator</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
-        :root[data-theme="dark"] {
-            --bg-color: #1a1b1e;
-            --container-bg: #27272a;
-            --input-bg: #3f3f46;
-            --input-border: #52525b;
-            --text-color: #e4e4e7;
-            --placeholder-color: #71717a;
-            --result-bg: #3f3f46;
-        }
-
-        :root[data-theme="light"] {
-            --bg-color: #f4f4f5;
-            --container-bg: #ffffff;
-            --input-bg: #ffffff;
-            --input-border: #d4d4d8;
-            --text-color: #18181b;
-            --placeholder-color: #71717a;
-            --result-bg: #f4f4f5;
-        }
-
-        body {
-            font-family: "Open Sans", sans-serif;
-            font-weight: 700;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            padding: 20px;
-            transition: background-color 0.3s ease;
-        }
-
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: 2px solid var(--input-border);
-            color: var(--text-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.2s ease;
-        }
-
-        .theme-toggle:hover {
-            background-color: var(--input-border);
-        }
-
-        .container {
-            background-color: var(--container-bg);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 700px;
-            transition: background-color 0.3s ease;
-        }
-
-        .input-grid {
-            display: grid;
-            grid-gap: 15px;
-            margin-bottom: 1.5rem;
-        }
-
-        @media (min-width: 768px) {
-            .input-grid {
-                grid-template-columns: repeat(5, 1fr);
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Time Calculator</title>
+        <style>
+            :root[data-theme="dark"] {
+                --bg-color: #1a1b1e;
+                --container-bg: #27272a;
+                --input-bg: #3f3f46;
+                --input-border: #52525b;
+                --text-color: #e4e4e7;
+                --placeholder-color: #71717a;
+                --result-bg: #3f3f46;
             }
-        }
 
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-wrapper label {
-            position: absolute;
-            top: -20px;
-            left: 0;
-            font-size: 0.9em;
-            color: var(--text-color);
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--input-bg);
-            border: 2px solid var(--input-border);
-            border-radius: 8px;
-            color: var(--text-color);
-            font-size: 1.1em;
-            transition: all 0.2s ease;
-            text-align: center;
-            box-sizing: border-box;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-        }
-
-        input[type="text"]::placeholder {
-            color: var(--placeholder-color);
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 1.5rem 0;
-            flex-wrap: wrap;
-        }
-
-        button:not(.theme-toggle) {
-            padding: 12px 24px;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: all 0.2s ease;
-            min-width: 140px;
-        }
-
-        .ao5-button {
-            background-color: #4f46e5;
-        }
-
-        .ao5-button:hover {
-            background-color: #4338ca;
-            transform: translateY(-1px);
-        }
-
-        .mo5-button {
-            background-color: #db2777;
-        }
-
-        .mo5-button:hover {
-            background-color: #be185d;
-            transform: translateY(-1px);
-        }
-
-        .clear-button {
-            background-color: #ef4444;
-        }
-
-        .clear-button:hover {
-            background-color: #dc2626;
-            transform: translateY(-1px);
-        }
-
-        #result, #mo5-result {
-            margin: 1rem 0;
-            padding: 1rem;
-            text-align: center;
-            font-size: 1.1em;
-            background-color: var(--result-bg);
-            border-radius: 8px;
-            opacity: 0;
-            transition: all 0.3s ease;
-            word-break: break-word;
-        }
-
-        #result:not(:empty), #mo5-result:not(:empty) {
-            opacity: 1;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 1rem;
+            :root[data-theme="light"] {
+                --bg-color: #f4f4f5;
+                --container-bg: #ffffff;
+                --input-bg: #ffffff;
+                --input-border: #d4d4d8;
+                --text-color: #18181b;
+                --placeholder-color: #71717a;
+                --result-bg: #f4f4f5;
             }
-            
-            button:not(.theme-toggle) {
-                width: 100%;
+
+            body {
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                margin: 0;
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                padding: 20px;
+                transition: background-color 0.3s ease;
             }
-            
-            #result, #mo5-result {
+
+            .theme-toggle {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: none;
+                border: 2px solid var(--input-border);
+                color: var(--text-color);
+                padding: 8px 16px;
+                border-radius: 20px;
+                cursor: pointer;
                 font-size: 0.9em;
-                padding: 0.8rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
-    <div class="container">
-        <div class="input-grid">
-            <div class="input-wrapper">
-                <input type="text" id="time1" placeholder="Time 1">
-            </div>
-            <div class="input-wrapper">
-                <input type="text" id="time2" placeholder="Time 2">
-            </div>
-            <div class="input-wrapper">
-                <input type="text" id="time3" placeholder="Time 3">
-            </div>
-            <div class="input-wrapper">
-                <input type="text" id="time4" placeholder="Time 4">
-            </div>
-            <div class="input-wrapper">
-                <input type="text" id="time5" placeholder="Time 5">
-            </div>
-        </div>
-        <div class="button-container">
-            <button class="ao5-button" onclick="calculateAo5()">Calculate Ao5</button>
-            <button class="mo5-button" onclick="calculateMo5()">Calculate Mo5</button>
-            <button class="clear-button" onclick="clearTimes()">Clear All</button>
-        </div>
-        <div id="result"></div>
-        <div id="mo5-result"></div>
-    </div>
-    <script>
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-        }
-
-        function clearTimes() {
-            // Clear all input fields
-            for (let i = 1; i <= 5; i++) {
-                document.getElementById(`time${i}`).value = '';
-            }
-            // Clear results
-            document.getElementById('result').innerText = '';
-            document.getElementById('mo5-result').innerText = '';
-        }
-
-        function calculateAo5() {
-            let valid = true;
-            let values = [
-                document.getElementById('time1').value.toUpperCase(),
-                document.getElementById('time2').value.toUpperCase(),
-                document.getElementById('time3').value.toUpperCase(),
-                document.getElementById('time4').value.toUpperCase(),
-                document.getElementById('time5').value.toUpperCase()
-            ];
-            valid = true
-            if (valid === true) {
-
-            let processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
-            let validValues = processedValues.filter(val => val !== null);
-
-            if (validValues.length < 3) {
-                document.getElementById('result').innerText = 'DNF';
-                return;
+                transition: all 0.2s ease;
             }
 
-            let minVal = Math.min(...validValues);
-            let maxVal = Math.max(...validValues);
-            let dnfs = processedValues.filter(val => val === null).length;
-            let displayValues = values.slice();
+            .theme-toggle:hover {
+                background-color: var(--input-border);
+            }
 
-            if (dnfs > 1) {
-                document.getElementById('result').innerText = 'DNF';
-                return;
-            } else if (dnfs === 1) {
-                let validSum = validValues.reduce((acc, val) => acc + val, 0);
-                let avg = ((validSum - minVal) / 3).toFixed(2);
+            .container {
+                background-color: var(--container-bg);
+                padding: 2rem;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-width: 700px;
+                transition: background-color 0.3s ease;
+            }
 
-                for (let i = 0; i < values.length; i++) {
-                    if (processedValues[i] === null) {
-                        displayValues[i] = `(DNF)`;
-                    } else if (processedValues[i] === minVal) {
-                        displayValues[i] = `(${minVal.toFixed(2)})`;
-                        minVal = null;
-                    } else if (processedValues[i] === maxVal) {
-                        displayValues[i] = processedValues[i].toFixed(2);
-                    } else {
-                        displayValues[i] = processedValues[i].toFixed(2);
-                    }
+            .input-grid {
+                display: grid;
+                grid-gap: 15px;
+                margin-bottom: 1.5rem;
+            }
+
+            @media (min-width: 768px) {
+                .input-grid {
+                    grid-template-columns: repeat(5, 1fr);
                 }
+            }
+
+            .input-wrapper {
+                position: relative;
+            }
+
+            .input-wrapper label {
+                position: absolute;
+                top: -20px;
+                left: 0;
+                font-size: 0.9em;
+                color: var(--text-color);
+            }
+
+            input[type="text"] {
+                width: 100%;
+                padding: 12px;
+                background-color: var(--input-bg);
+                border: 2px solid var(--input-border);
+                border-radius: 8px;
+                color: var(--text-color);
+                font-size: 1.1em;
+                transition: all 0.2s ease;
+                text-align: center;
+                box-sizing: border-box;
+            }
+
+            input[type="text"]:focus {
+                outline: none;
+                border-color: #6366f1;
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            }
+
+            input[type="text"]::placeholder {
+                color: var(--placeholder-color);
+            }
+
+            .button-container {
+                display: flex;
+                justify-content: center;
+                gap: 12px;
+                margin: 1.5rem 0;
+                flex-wrap: wrap;
+            }
+
+            button:not(.theme-toggle) {
+                padding: 12px 24px;
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 1.1em;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                min-width: 140px;
+            }
+
+            .ao5-button {
+                background-color: #4f46e5;
+            }
+
+            .ao5-button:hover {
+                background-color: #4338ca;
+                transform: translateY(-1px);
+            }
+
+            .mo5-button {
+                background-color: #db2777;
+            }
+
+            .mo5-button:hover {
+                background-color: #be185d;
+                transform: translateY(-1px);
+            }
+
+            .clear-button {
+                background-color: #ef4444;
+            }
+
+            .clear-button:hover {
+                background-color: #dc2626;
+                transform: translateY(-1px);
+            }
+
+            #result, #mo5-result {
+                margin: 1rem 0;
+                padding: 1rem;
+                text-align: center;
+                font-weight: 500;
+                font-size: 1.1em;
+                background-color: var(--result-bg);
+                border-radius: 8px;
+                opacity: 0;
+                transition: all 0.3s ease;
+                word-break: break-word;
+            }
+
+            #result:not(:empty), #mo5-result:not(:empty) {
+                opacity: 1;
+            }
+
+            @media (max-width: 480px) {
+                .container {
+                    padding: 1rem;
+                }
+
+                button:not(.theme-toggle) {
+                    width: 100%;
+                }
+
+                #result, #mo5-result {
+                    font-size: 0.9em;
+                    padding: 0.8rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+        <div class="container">
+            <div class="input-grid">
+                <div class="input-wrapper"><input type="text" id="time1" placeholder="Time 1"></div>
+                <div class="input-wrapper"><input type="text" id="time2" placeholder="Time 2"></div>
+                <div class="input-wrapper"><input type="text" id="time3" placeholder="Time 3"></div>
+                <div class="input-wrapper"><input type="text" id="time4" placeholder="Time 4"></div>
+                <div class="input-wrapper"><input type="text" id="time5" placeholder="Time 5"></div>
+            </div>
+            <div class="button-container">
+                <button class="ao5-button" onclick="calculateAo5()">Calculate Ao5</button>
+                <button class="mo5-button" onclick="calculateMo5()">Calculate Mo5</button>
+                <button class="clear-button" onclick="clearTimes()">Clear All</button>
+            </div>
+            <div id="result"></div>
+            <div id="mo5-result"></div>
+        </div>
+        <script>
+            function toggleTheme() {
+                const html = document.documentElement;
+                const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', newTheme);
+            }
+
+            function clearTimes() {
+                for (let i = 1; i <= 5; i++) {
+                    document.getElementById(`time${i}`).value = '';
+                }
+                document.getElementById('result').innerText = '';
+                document.getElementById('mo5-result').innerText = '';
+            }
+
+            function calculateAo5() {
+                const values = Array.from({ length: 5 }, (_, i) => document.getElementById(`time${i + 1}`).value.toUpperCase());
+                const processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
+                const validValues = processedValues.filter(val => val !== null);
+
+                if (validValues.length < 3 || processedValues.filter(val => val === null).length > 1) {
+                    document.getElementById('result').innerText = 'DNF';
+                    return;
+                }
+
+                let minVal = Math.min(...validValues);
+                let maxVal = Math.max(...validValues);
+                let sum = validValues.reduce((acc, val) => acc + val, 0);
+                let avg = ((sum - minVal - maxVal) / 3).toFixed(2);
+                let displayValues = values.map((val, i) => {
+                    const num = processedValues[i];
+                    if (num === null) return '(DNF)';
+                    if (num === minVal) {
+                        minVal = null;
+                        return `(${num.toFixed(2)})`;
+                    }
+                    if (num === maxVal) {
+                        maxVal = null;
+                        return `(${num.toFixed(2)})`;
+                    }
+                    return num.toFixed(2);
+                });
 
                 document.getElementById('result').innerText = displayValues.join(', ') + ' = ' + avg;
-                return;
             }
 
-            let sum = validValues.reduce((acc, val) => acc + val, 0);
-            let avg = ((sum - minVal - maxVal) / 3).toFixed(2);
+            function calculateMo5() {
+                const values = Array.from({ length: 5 }, (_, i) => document.getElementById(`time${i + 1}`).value.toUpperCase());
+                const processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
 
-            for (let i = 0; i < values.length; i++) {
-                if (processedValues[i] === null) {
-                    displayValues[i] = `(DNF)`;
-                } else if (processedValues[i] === minVal) {
-                    displayValues[i] = `(${minVal.toFixed(2)})`;
-                    minVal = null;
-                } else if (processedValues[i] === maxVal) {
-                    displayValues[i] = `(${maxVal.toFixed(2)})`;
-                    maxVal = null;
-                } else {
-                    displayValues[i] = processedValues[i].toFixed(2);
+                if (processedValues.includes(null)) {
+                    document.getElementById('mo5-result').innerText = 'DNF';
+                    return;
                 }
+
+                const sum = processedValues.reduce((acc, val) => acc + val, 0);
+                const avg = (sum / processedValues.length).toFixed(2);
+                const displayValues = processedValues.map(val => val.toFixed(2));
+
+                document.getElementById('mo5-result').innerText = displayValues.join(', ') + ' = ' + avg;
             }
-
-            document.getElementById('result').innerText = displayValues.join(', ') + ' = ' + avg;
-            }
-        }
-
-        function calculateMo5() {
-            let valid = true;
-            let values = [
-                document.getElementById('time1').value.toUpperCase(),
-                document.getElementById('time2').value.toUpperCase(),
-                document.getElementById('time3').value.toUpperCase(),
-                document.getElementById('time4').value.toUpperCase(),
-                document.getElementById('time5').value.toUpperCase()
-            ];
-            values.forEach(value => {
-                if (!standardTimeRegex.test(value) && valid === true) {
-                alert(
-                    `Invalid time format or blank field. Please use either:\n` +
-                    `- mm:ss.ms (e.g., "1:23.45" or "23.45")\n` +
-                    `- For times under a minute, you can omit the minutes (e.g., "45.67")`
-                );
-                valid = false;
-                return;
-                }
-            });
-            if (valid === true) {
-
-            let processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
-            
-            if (processedValues.includes(null)) {
-                document.getElementById('mo5-result').innerText = 'DNF';
-                return;
-            }
-
-            let validValues = processedValues.filter(val => val !== null);
-            let sum = validValues.reduce((acc, val) => acc + val, 0);
-            let avg = (sum / validValues.length).toFixed(2);
-
-            let result = values.map((val, idx) => {
-                if (processedValues[idx] === null) {
-                    return `(DNF)`;
-                } else {
-                    return processedValues[idx].toFixed(2);
-                }
-            }).join(', ') + ' = ' + avg;
-
-            document.getElementById('mo5-result').innerText = result;
-        }
-    }
-    </script>
-</body>
+        </script>
+    </body>
 </html>
