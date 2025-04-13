@@ -1,278 +1,260 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Time Calculator</title>
-        <style>
-            :root[data-theme="dark"] {
-                --bg-color: #1a1b1e;
-                --container-bg: #27272a;
-                --input-bg: #3f3f46;
-                --input-border: #52525b;
-                --text-color: #e4e4e7;
-                --placeholder-color: #71717a;
-                --result-bg: #3f3f46;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Calculator</title>
+    <style>
+        :root[data-theme="dark"] {
+            --bg-color: #1a1b1e;
+            --container-bg: #27272a;
+            --input-bg: #3f3f46;
+            --input-border: #52525b;
+            --text-color: #e4e4e7;
+            --placeholder-color: #71717a;
+            --result-bg: #3f3f46;
+        }
 
-            :root[data-theme="light"] {
-                --bg-color: #f4f4f5;
-                --container-bg: #ffffff;
-                --input-bg: #ffffff;
-                --input-border: #d4d4d8;
-                --text-color: #18181b;
-                --placeholder-color: #71717a;
-                --result-bg: #f4f4f5;
-            }
+        :root[data-theme="light"] {
+            --bg-color: #f4f4f5;
+            --container-bg: #ffffff;
+            --input-bg: #ffffff;
+            --input-border: #d4d4d8;
+            --text-color: #18181b;
+            --placeholder-color: #71717a;
+            --result-bg: #f4f4f5;
+        }
 
-            body {
-                font-family: sans-serif;
-                background-color: var(--bg-color);
-                color: var(--text-color);
-                margin: 0;
-                min-height: 100vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                padding: 20px;
-                transition: background-color 0.3s ease;
-            }
+        body {
+            font-family: sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            transition: background-color 0.3s ease;
+        }
 
-            .theme-toggle {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                background: none;
-                border: 2px solid var(--input-border);
-                color: var(--text-color);
-                padding: 8px 16px;
-                border-radius: 20px;
-                cursor: pointer;
-                font-size: 0.9em;
-                transition: all 0.2s ease;
-            }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: 2px solid var(--input-border);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
+        }
 
-            .theme-toggle:hover {
-                background-color: var(--input-border);
-            }
+        .theme-toggle:hover {
+            background-color: var(--input-border);
+        }
 
-            .container {
-                background-color: var(--container-bg);
-                padding: 2rem;
-                border-radius: 12px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-                width: 100%;
-                max-width: 700px;
-                transition: background-color 0.3s ease;
-            }
+        .container {
+            background-color: var(--container-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 700px;
+            transition: background-color 0.3s ease;
+        }
 
+        .input-grid {
+            display: grid;
+            grid-gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
             .input-grid {
-                display: grid;
-                grid-gap: 15px;
-                margin-bottom: 1.5rem;
+                grid-template-columns: repeat(5, 1fr);
             }
+        }
 
-            @media (min-width: 768px) {
-                .input-grid {
-                    grid-template-columns: repeat(5, 1fr);
-                }
-            }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--input-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 1.1em;
+            text-align: center;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
 
-            .input-wrapper {
-                position: relative;
-            }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
 
-            .input-wrapper label {
-                position: absolute;
-                top: -20px;
-                left: 0;
-                font-size: 0.9em;
-                color: var(--text-color);
-            }
+        input[type="text"]::placeholder {
+            color: var(--placeholder-color);
+        }
 
-            input[type="text"] {
-                width: 100%;
-                padding: 12px;
-                background-color: var(--input-bg);
-                border: 2px solid var(--input-border);
-                border-radius: 8px;
-                color: var(--text-color);
-                font-size: 1.1em;
-                transition: all 0.2s ease;
-                text-align: center;
-                box-sizing: border-box;
-            }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
 
-            input[type="text"]:focus {
-                outline: none;
-                border-color: #6366f1;
-                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-            }
+        button {
+            padding: 12px 24px;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 500;
+            min-width: 140px;
+            transition: all 0.2s ease;
+        }
 
-            input[type="text"]::placeholder {
-                color: var(--placeholder-color);
-            }
+        .ao5-button {
+            background-color: #4f46e5;
+        }
 
-            .button-container {
-                display: flex;
-                justify-content: center;
-                gap: 12px;
-                margin: 1.5rem 0;
-                flex-wrap: wrap;
-            }
+        .ao5-button:hover {
+            background-color: #4338ca;
+        }
 
-            button:not(.theme-toggle) {
-                padding: 12px 24px;
-                color: #fff;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 1.1em;
-                font-weight: 500;
-                transition: all 0.2s ease;
-                min-width: 140px;
-            }
+        .mo5-button {
+            background-color: #db2777;
+        }
 
-            .ao5-button {
-                background-color: #4f46e5;
-            }
+        .mo5-button:hover {
+            background-color: #be185d;
+        }
 
-            .ao5-button:hover {
-                background-color: #4338ca;
-                transform: translateY(-1px);
-            }
+        .clear-button {
+            background-color: #ef4444;
+        }
 
-            .mo5-button {
-                background-color: #db2777;
-            }
+        .clear-button:hover {
+            background-color: #dc2626;
+        }
 
-            .mo5-button:hover {
-                background-color: #be185d;
-                transform: translateY(-1px);
-            }
+        #result, #mo5-result {
+            margin: 1rem 0;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1.1em;
+            background-color: var(--result-bg);
+            border-radius: 8px;
+            word-break: break-word;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
 
-            .clear-button {
-                background-color: #ef4444;
-            }
-
-            .clear-button:hover {
-                background-color: #dc2626;
-                transform: translateY(-1px);
-            }
-
-            #result, #mo5-result {
-                margin: 1rem 0;
-                padding: 1rem;
-                text-align: center;
-                font-weight: 500;
-                font-size: 1.1em;
-                background-color: var(--result-bg);
-                border-radius: 8px;
-                opacity: 0;
-                transition: all 0.3s ease;
-                word-break: break-word;
-            }
-
-            #result:not(:empty), #mo5-result:not(:empty) {
-                opacity: 1;
-            }
-
-            @media (max-width: 480px) {
-                .container {
-                    padding: 1rem;
-                }
-
-                button:not(.theme-toggle) {
-                    width: 100%;
-                }
-
-                #result, #mo5-result {
-                    font-size: 0.9em;
-                    padding: 0.8rem;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
-        <div class="container">
-            <div class="input-grid">
-                <div class="input-wrapper"><input type="text" id="time1" placeholder="Time 1"></div>
-                <div class="input-wrapper"><input type="text" id="time2" placeholder="Time 2"></div>
-                <div class="input-wrapper"><input type="text" id="time3" placeholder="Time 3"></div>
-                <div class="input-wrapper"><input type="text" id="time4" placeholder="Time 4"></div>
-                <div class="input-wrapper"><input type="text" id="time5" placeholder="Time 5"></div>
-            </div>
-            <div class="button-container">
-                <button class="ao5-button" onclick="calculateAo5()">Calculate Ao5</button>
-                <button class="mo5-button" onclick="calculateMo5()">Calculate Mo5</button>
-                <button class="clear-button" onclick="clearTimes()">Clear All</button>
-            </div>
-            <div id="result"></div>
-            <div id="mo5-result"></div>
+        #result:not(:empty), #mo5-result:not(:empty) {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    <div class="container">
+        <div class="input-grid">
+            <input type="text" id="time1" placeholder="Time 1">
+            <input type="text" id="time2" placeholder="Time 2">
+            <input type="text" id="time3" placeholder="Time 3">
+            <input type="text" id="time4" placeholder="Time 4">
+            <input type="text" id="time5" placeholder="Time 5">
         </div>
-        <script>
-            function toggleTheme() {
-                const html = document.documentElement;
-                const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-                html.setAttribute('data-theme', newTheme);
+        <div class="button-container">
+            <button class="ao5-button" onclick="calculateAo5()">Calculate Ao5</button>
+            <button class="mo5-button" onclick="calculateMo5()">Calculate Mo5</button>
+            <button class="clear-button" onclick="clearTimes()">Clear All</button>
+        </div>
+        <div id="result"></div>
+        <div id="mo5-result"></div>
+    </div>
+    <script>
+        // Toggles the page's theme between light and dark
+        function toggleTheme() {
+            const html = document.documentElement;
+            // Check the current theme and toggle between 'dark' and 'light'
+            const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+        }
+
+        // Clears all input fields and resets the result displays
+        function clearTimes() {
+            // Loop through the 5 time inputs and set their values to an empty string
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`time${i}`).value = '';
+            }
+            // Clear the Ao5 and Mo5 result areas
+            document.getElementById('result').innerText = '';
+            document.getElementById('mo5-result').innerText = '';
+        }
+
+        // Calculates Average of Five (Ao5), excluding the best and worst times
+        function calculateAo5() {
+            // Retrieve input values and convert them to uppercase for consistency
+            const values = Array.from({ length: 5 }, (_, i) => document.getElementById(`time${i + 1}`).value.toUpperCase());
+            // Convert valid times to numbers; mark 'DNF' or 'DNS' as null
+            const processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
+            // Filter out null values to get valid numerical times
+            const validValues = processedValues.filter(val => val !== null);
+
+            // If there are fewer than 3 valid times or more than 1 null value, set result as 'DNF'
+            if (validValues.length < 3 || processedValues.filter(val => val === null).length > 1) {
+                document.getElementById('result').innerText = 'DNF';
+                return;
             }
 
-            function clearTimes() {
-                for (let i = 1; i <= 5; i++) {
-                    document.getElementById(`time${i}`).value = '';
-                }
-                document.getElementById('result').innerText = '';
-                document.getElementById('mo5-result').innerText = '';
+            // Calculate the minimum and maximum valid times
+            const minVal = Math.min(...validValues);
+            const maxVal = Math.max(...validValues);
+            // Compute the average excluding the best and worst times, rounded to 2 decimals
+            const avg = ((validValues.reduce((acc, val) => acc + val, 0) - minVal - maxVal) / 3).toFixed(2);
+
+            // Format display values, marking the best (minVal) and worst (maxVal) times with parentheses
+            const displayValues = values.map((val, i) => {
+                const num = processedValues[i];
+                if (num === null) return '(DNF)';
+                if (num === minVal || num === maxVal) return `(${num.toFixed(2)})`;
+                return num.toFixed(2);
+            });
+
+            // Display the formatted Ao5 result
+            document.getElementById('result').innerText = `${displayValues.join(', ')} = ${avg}`;
+        }
+
+        // Calculates Mean of Five (Mo5), which is the average of all valid times (works even with only 3 valid values)
+        function calculateMo5() {
+            // Retrieve input values and convert them to uppercase for consistency
+            const values = Array.from({ length: 5 }, (_, i) => document.getElementById(`time${i + 1}`).value.toUpperCase());
+            // Convert valid times to numbers; mark 'DNF' or 'DNS' as null
+            const processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
+            // Filter out null values to get valid numerical times
+            const validValues = processedValues.filter(val => val !== null);
+
+            // If there are fewer than 3 valid times, display 'DNF'
+            if (validValues.length < 3) {
+                document.getElementById('mo5-result').innerText = 'DNF';
+                return;
             }
 
-            function calculateAo5() {
-                const values = Array.from({ length: 5 }, (_, i) => document.getElementById(`time${i + 1}`).value.toUpperCase());
-                const processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
-                const validValues = processedValues.filter(val => val !== null);
-
-                if (validValues.length < 3 || processedValues.filter(val => val === null).length > 1) {
-                    document.getElementById('result').innerText = 'DNF';
-                    return;
-                }
-
-                let minVal = Math.min(...validValues);
-                let maxVal = Math.max(...validValues);
-                let sum = validValues.reduce((acc, val) => acc + val, 0);
-                let avg = ((sum - minVal - maxVal) / 3).toFixed(2);
-                let displayValues = values.map((val, i) => {
-                    const num = processedValues[i];
-                    if (num === null) return '(DNF)';
-                    if (num === minVal) {
-                        minVal = null;
-                        return `(${num.toFixed(2)})`;
-                    }
-                    if (num === maxVal) {
-                        maxVal = null;
-                        return `(${num.toFixed(2)})`;
-                    }
-                    return num.toFixed(2);
-                });
-
-                document.getElementById('result').innerText = displayValues.join(', ') + ' = ' + avg;
-            }
-
-            function calculateMo5() {
-                const values = Array.from({ length: 5 }, (_, i) => document.getElementById(`time${i + 1}`).value.toUpperCase());
-                const processedValues = values.map(val => (val === 'DNF' || val === 'DNS') ? null : parseFloat(val));
-
-                if (processedValues.includes(null)) {
-                    document.getElementById('mo5-result').innerText = 'DNF';
-                    return;
-                }
-
-                const sum = processedValues.reduce((acc, val) => acc + val, 0);
-                const avg = (sum / processedValues.length).toFixed(2);
-                const displayValues = processedValues.map(val => val.toFixed(2));
-
-                document.getElementById('mo5-result').innerText = displayValues.join(', ') + ' = ' + avg;
-            }
-        </script>
-    </body>
+            // Compute the average of all valid times, rounded to 2 decimals
+            const avg = (validValues.reduce((acc, val) => acc + val, 0) / validValues.length).toFixed(2);
+            // Display the formatted Mo5 result
+            document.getElementById('mo5-result').innerText = `${validValues.map(val => val.toFixed(2)).join(', ')} = ${avg}`;
+        }
+    </script>
+</body>
 </html>
