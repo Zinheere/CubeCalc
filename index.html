@@ -246,8 +246,8 @@
             // Filter out null values to get valid numerical times
             const validValues = processedValues.filter(val => val !== null);
 
-            // If there are fewer than 3 valid times, display 'DNF'
-            if (validValues.length < 3) {
+            // If there are fewer than 4 valid times, display 'DNF'
+            if (validValues.length < 4) {
                 document.getElementById('result').innerText = 'DNF';
                 return;
             }
