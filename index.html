@@ -216,7 +216,7 @@
             const validValues = processedValues.filter(val => val !== null);
 
             // If there are fewer than 3 valid times or more than 1 null value, set result as 'DNF'
-            if (validValues.length < 3 || processedValues.filter(val => val === null).length > 1) {
+            if (validValues.length < 4 || processedValues.filter(val => val === null).length > 1) {
                 document.getElementById('result').innerText = 'DNF';
                 return;
             }
