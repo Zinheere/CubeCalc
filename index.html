@@ -150,7 +150,7 @@
             background-color: #dc2626;
         }
 
-        #result, #mo5-result {
+        #result{
             margin: 1rem 0;
             padding: 1rem;
             text-align: center;
@@ -163,7 +163,7 @@
             transition: all 0.3s ease;
         }
 
-        #result:not(:empty), #mo5-result:not(:empty) {
+        #result:not(:empty){
             opacity: 1;
         }
     </style>
@@ -184,7 +184,6 @@
             <button class="clear-button" onclick="clearTimes()">Clear All</button>
         </div>
         <div id="result"></div>
-        <div id="mo5-result"></div>
     </div>
     <script>
         // Toggles the page's theme between light and dark
@@ -203,7 +202,6 @@
             }
             // Clear the Ao5 and Mo5 result areas
             document.getElementById('result').innerText = '';
-            document.getElementById('mo5-result').innerText = '';
         }
 
         // Calculates Average of Five (Ao5), excluding the best and worst times
@@ -250,14 +248,14 @@
 
             // If there are fewer than 3 valid times, display 'DNF'
             if (validValues.length < 3) {
-                document.getElementById('mo5-result').innerText = 'DNF';
+                document.getElementById('result').innerText = 'DNF';
                 return;
             }
 
             // Compute the average of all valid times, rounded to 2 decimals
             const avg = (validValues.reduce((acc, val) => acc + val, 0) / validValues.length).toFixed(2);
             // Display the formatted Mo5 result
-            document.getElementById('mo5-result').innerText = `${validValues.map(val => val.toFixed(2)).join(', ')} = ${avg}`;
+            document.getElementById('result').innerText = `${validValues.map(val => val.toFixed(2)).join(', ')} = ${avg}`;
         }
     </script>
 </body>
