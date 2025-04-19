@@ -1,6 +1,6 @@
-# CubengCalc V1
-## OFFICIAL LINK: https://cubeng-calc.vercel.app
+# CubeCalc V2
+## OFFICIAL LINK: https://cubecalc.vercel.app
 ## **Features**
-> - Ao5 and Mo5 calculator
-> - Support for DNFs
-### Dark Mode coming soon
+- Ao5 and Mo5 calculator
+- Support for DNF and DNS
+- Color theme toggle
